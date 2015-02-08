@@ -9,17 +9,19 @@ using System.Data;
 using System.Xml;
 using System.Configuration;
 using System.Dynamic;
+using System.Text;
 
 namespace QuestionTosser.Controllers
 {
     public class ProfessorController : Controller
     {
+        [HttpPost]
         public JsonResult ProfessorRegister()
         {
             string pUName = Request.Form["username"];
             string pPass = Request.Form["password"];
             string pName = Request.Form["name"];
-            string salt = "salt";
+            byte[] salt;
             try
             {
                 using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["QuestionTosserMySQLDBConnection"].ConnectionString))
@@ -40,10 +42,11 @@ namespace QuestionTosser.Controllers
 
                     comm.Parameters.AddWithValue("username", pUName);
                     comm.Parameters.AddWithValue("name", pName);
+                    salt = RandomHash.PasswordHash.RandomSalt(4, 8);
+                    pPass = RandomHash.PasswordHash.ComputeHash(pPass, "SHA256", salt);
                     comm.Parameters.AddWithValue("password", pPass);
-                    comm.Parameters.AddWithValue("salt", salt);
+                    comm.Parameters.AddWithValue("salt", Convert.ToBase64String(salt));
                     int rowsAffected = comm.ExecuteNonQuery();
-                    System.Diagnostics.Debug.WriteLine(rowsAffected.ToString() + " inserted");
                     if (rowsAffected == 1)
                     {
                         return Json(new { msg = "Success", status = "RegisterPSucceed" });
@@ -64,8 +67,8 @@ namespace QuestionTosser.Controllers
                 System.Diagnostics.Debug.WriteLine(e.Message);
                 return Json(new { msg = "Something went wrong", status = "RegisterPFailGen" });
             }
-            return Json(new { msg = "Not implemented" });
         }
+        [HttpPost]
         public JsonResult ProfessorLogin()
         {
 
@@ -86,10 +89,16 @@ namespace QuestionTosser.Controllers
                     if (reader.HasRows)
                     {
                         reader.Read();
+                        byte[] salt=Convert.FromBase64String((String)reader["salt"]);
+                        pPass = RandomHash.PasswordHash.ComputeHash(pPass, "SHA256", salt);
                         if (((String)reader["password"]) == pPass)
                         {
                             Session.RemoveAll();
-                            Session.Add("professor", new Dictionary<string, string>{ {"username", (string)reader["username"]}});
+                            Session.Add("professor", new Dictionary<string, string>{ 
+                                {"username", (string)reader["username"]},
+                                {"name", (string)reader["name"]},
+                                {"id", reader["id"].ToString()}
+                            });
                             return Json(new { msg = "Success!", status = "LoginPSuceed" });
                         }
                         else
@@ -121,42 +130,112 @@ namespace QuestionTosser.Controllers
             //int c=reader.FieldCount;
             //System.Diagnostics.Debug.WriteLine("Column number: "+c.ToString());
         }
-
+        [HttpPost]
         public JsonResult StartClass()
         {
             if (Session!=null && Session["professor"]!=null)
             {
                 string pName = ((Dictionary<string, string>)(Session["professor"]))["name"];
                 string pUName = ((Dictionary<string, string>)(Session["professor"]))["username"];
+                string pID = ((Dictionary<string, string>)(Session["professor"]))["id"];
                 string pCName = Request.Form["classname"];
+                string cCode = Request.Form["code"];
                 try
                 {
                     using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["QuestionTosserMySQLDBConnection"].ConnectionString))
                     {
-                        string sqlStr = "SELECT * FROM `class` WHERE prof_id=? && name=?";
+                        conn.Open();
                         
+                        
+                        //string sqlStr = "SELECT * FROM `class` WHERE prof_id=? && name=?";
+                        //OdbcCommand comm = new OdbcCommand(sqlStr, conn);
+                        //comm.Parameters.AddWithValue("profID", pID);
+                        //comm.Parameters.AddWithValue("name", pName);
+                        //OdbcDataReader reader = comm.ExecuteReader();
+                        //if (reader.HasRows)
+                        //{
+                        //    reader.Read();
+                        //    Int32 classID = (Int32)reader["class_id"];
+                        //    comm.Parameters.Clear();
+                        //    reader.Close();
+
+                        //    sqlStr = "UPDATE TABLE `class` SET ongoing=1, code=? WHERE class_id=?";
+                        //    comm.CommandText = sqlStr;
+                        //    comm.Parameters.AddWithValue("classCode", cCode);
+                        //    comm.Parameters.AddWithValue("classID", classID);
+
+                        //    int rowsAffected = comm.ExecuteNonQuery();
+                        //    if (rowsAffected == 1)
+                        //    {
+                        //        return Json(new
+                        //        {
+                        //            msg = "Success",
+                        //            status = "StartClassSucceed",
+                        //            classname= pCName, 
+                        //            classID=classID, 
+                        //            code = cCode
+                        //        });
+                        //    }
+                        //    else
+                        //    {
+                        //        return Json(new { msg = "Didn't update", status = "StartClassFailUnknown" });
+                        //    }
+                        //}
+                        //else
+                        {
+                            
+                            //comm.Parameters.Clear();
+                            //reader.Close();
+
+                            
+                            string sqlStr= "INSERT INTO `class`(name, prof_id, code) VALUES(?, ?, ?);";
+                            OdbcCommand comm = new OdbcCommand(sqlStr, conn);
+
+                            OdbcTransaction tran = conn.BeginTransaction();
+                            comm.Transaction = tran;
+
+                            comm.Parameters.AddWithValue("name", pCName);
+                            comm.Parameters.AddWithValue("profID", pID);
+                            comm.Parameters.AddWithValue("code", cCode);
+                            OdbcDataReader reader=comm.ExecuteReader();
+
+                            comm.Parameters.Clear();
+                            reader.Close();
+
+                            sqlStr = "SELECT LAST_INSERT_ID();";
+                            comm.CommandText = sqlStr;
+
+                            Int32 classID = Convert.ToInt32(comm.ExecuteScalar());
+
+                            tran.Commit();
+
+                            return Json(new 
+                            { 
+                                msg = "Success",
+                                status = "StartClassSucceed",  
+                                classname = pCName,
+                                classID = classID,
+                                code = cCode
+                            });
+                        }
                     }
                 }
                 catch (OdbcException e)
                 {
-                    
-                
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    return Json(new { msg = "Something about database went wrong", status="ClassStartFailDB"});
                 }
-                return Json(new { msg = "Success", status="StartClassPSucceed" });
             }
-            else if(Session==null)
-            {
-                return Json(new { msg="Professor not logged in", status="StartClassPFailNotLoggedIn"});
-            }
-            else if (Session["student"] != null)
+            else if (Session == null || Session["professor"] == null)
             {
                 return Json(new { msg = "Professor not logged in", status = "StartClassPFailNotLoggedIn" });
             }
-
-            //string profName=Session["professor"];
-            
-            return Json(new { msg="NotImplemented"});
+            else
+            {
+                return Json(new { msg = "Unknown state", status="Unknown" });
+            }
         }
+
 
     }
 }
