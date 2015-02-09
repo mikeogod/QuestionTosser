@@ -13,19 +13,34 @@ namespace SignalRChat
 {
     public class ClassRoomHub : Hub
     {
+        public override Task OnConnected()
+        {
+            return base.OnConnected();
+        }
         public override Task OnDisconnected(bool stopCalled)
         {
-            using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["QuestionTosserMySQLDBConnection"].ConnectionString))
+            try
             {
-                conn.Open();
-                string sqlStr = "DELETE FROM `class` WHERE prof_connection_id=?";
-                OdbcCommand comm = new OdbcCommand(sqlStr, conn);
-                comm.Parameters.AddWithValue("profConnID", Context.ConnectionId);
-                int rowsDeleted = comm.ExecuteNonQuery();
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["QuestionTosserMySQLDBConnection"].ConnectionString))
+                {
+                    conn.Open();
+                    string sqlStr = "DELETE FROM `class` WHERE prof_connection_id=?";
+                    OdbcCommand comm = new OdbcCommand(sqlStr, conn);
+                    comm.Parameters.AddWithValue("profConnID", Context.ConnectionId);
+                    int rowsDeleted = comm.ExecuteNonQuery();
+
+                }
 
             }
+            catch (OdbcException e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+
             return base.OnDisconnected(stopCalled);
+            
         }
+
         [HubMethodName("StartClass")]
         public Task StartClass(string classID)
         {
@@ -40,26 +55,27 @@ namespace SignalRChat
                     int rowsUpdated=comm.ExecuteNonQuery();
                     if(rowsUpdated==1)
                     {
-                        return Clients.Client(Context.ConnectionId).getResponse("Class room started!");
+                        return Clients.Client(Context.ConnectionId).postQuestion("Class room started!");
                     }
                     else
                     {
-                        return Clients.Client(Context.ConnectionId).getResponse("Class doesn't exist!");
+                        return Clients.Client(Context.ConnectionId).postQuestion("Class doesn't exist!");
                     }
                 }
             }
             catch (OdbcException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
-                return Clients.Client(Context.ConnectionId).getResponse("StartClass has encountered an exception!");
+                return Clients.Client(Context.ConnectionId).postQuestion("StartClass has encountered an exception!");
             }
         }
 
         [HubMethodName("Toss")]
         public void Toss(string name, string question, string profConnID)
         {
-            Clients.Client(profConnID).getResponse("A student asked: "+question);
+            Clients.Client(profConnID).postQuestion(name+" asked: "+question);
         }
+
 
     }
 }
