@@ -19,7 +19,7 @@ namespace QuestionTosser.Controllers
         {
             string sUName = Request.Form["username"];
             string sPass = Request.Form["password"];
-            string salt = "salt";
+            byte[] salt;
             try
             {
                 using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["QuestionTosserMySQLDBConnection"].ConnectionString))
@@ -39,8 +39,10 @@ namespace QuestionTosser.Controllers
                     comm.CommandText = sqlStr;
 
                     comm.Parameters.AddWithValue("username", sUName);
+                    salt = RandomHash.PasswordHash.RandomSalt(4, 8);
+                    sPass = RandomHash.PasswordHash.ComputeHash(sPass, "SHA256", salt);
                     comm.Parameters.AddWithValue("password", sPass);
-                    comm.Parameters.AddWithValue("salt", salt);
+                    comm.Parameters.AddWithValue("salt", Convert.ToBase64String(salt));
                     int rowsAffected = comm.ExecuteNonQuery();
                     if (rowsAffected == 1)
                     {
@@ -83,6 +85,8 @@ namespace QuestionTosser.Controllers
                     if (reader.HasRows)
                     {
                         reader.Read();
+                        byte[] salt = Convert.FromBase64String((String)reader["salt"]);
+                        sPass = RandomHash.PasswordHash.ComputeHash(sPass, "SHA256", salt);
                         if (((String)reader["password"]) == sPass)
                         {
                             Session.RemoveAll();
@@ -90,7 +94,7 @@ namespace QuestionTosser.Controllers
                                 {"username", (string)reader["username"]},
                                 {"id", reader["id"].ToString()}
                             });
-                            return Json(new { msg = "Success!", status = "LoginSSuceed" });
+                            return Json(new { msg = "Success!", status = "LoginSSucceed" });
                         }
                         else
                         {

@@ -73,6 +73,14 @@ namespace SignalRChat
         [HubMethodName("Toss")]
         public void Toss(string name, string question, string profConnID)
         {
+            if (name == "")
+            {
+                name = "Anonymous";
+            }
+            if (question == "" || profConnID=="")
+            {
+                return;
+            }
             Clients.Client(profConnID).postQuestion(name+" asked: "+question);
         }
 

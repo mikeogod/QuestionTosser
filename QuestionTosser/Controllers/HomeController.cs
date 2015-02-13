@@ -19,7 +19,7 @@ namespace QuestionTosser.Controllers
 
         public ActionResult Index()
         {
-            return View("Index");
+            return View("ClassRoom");
         }
         public ActionResult ClassRoom()
         {
@@ -30,7 +30,8 @@ namespace QuestionTosser.Controllers
             return View("SignalRChat");
         }
         
-        JsonResult Logout()
+        [HttpPost]
+        public JsonResult Logout()
         {
             Session.RemoveAll();
             Session.Abandon();

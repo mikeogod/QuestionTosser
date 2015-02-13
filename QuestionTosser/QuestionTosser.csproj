@@ -127,7 +127,6 @@
     <Compile Include="Controllers\ProfessorController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="RandomHash\PasswordHash.cs" />
-    <Compile Include="SignalR\ChatHub.cs" />
     <Compile Include="SignalR\ClassRoomHub.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -140,13 +139,22 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="PageResources\Audios\alert1.mp3" />
+    <Content Include="PageResources\Images\checkboxbg.gif" />
+    <Content Include="PageResources\Images\Logos\logo1.jpg" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="PageResources\Images\default.jpg" />
+    <Content Include="PageResources\Images\select.gif" />
     <Content Include="Scripts\jquery-1.11.1.min.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery.fitvids.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="Styles\base.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -158,13 +166,11 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\Index.cshtml" />
-    <Content Include="Views\Shared\SignalRChat.cshtml" />
     <Content Include="Views\Shared\ClassRoom.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Resource\Audios\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

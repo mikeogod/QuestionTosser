@@ -99,7 +99,7 @@ namespace QuestionTosser.Controllers
                                 {"name", (string)reader["name"]},
                                 {"id", reader["id"].ToString()}
                             });
-                            return Json(new { msg = "Success!", status = "LoginPSuceed" });
+                            return Json(new { msg = "Success!", status = "LoginPSucceed" });
                         }
                         else
                         {

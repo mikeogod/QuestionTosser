@@ -32,6 +32,6 @@ C:\Users\Michael-X\Documents\Visual Studio 2012\Projects\QuestionTosser\Question
 C:\Users\Michael-X\Documents\Visual Studio 2012\Projects\QuestionTosser\QuestionTosser\bin\System.Web.WebPages.xml
 C:\Users\Michael-X\Documents\Visual Studio 2012\Projects\QuestionTosser\QuestionTosser\bin\System.Web.WebPages.Deployment.xml
 C:\Users\Michael-X\Documents\Visual Studio 2012\Projects\QuestionTosser\QuestionTosser\bin\System.Web.WebPages.Razor.xml
-C:\Users\Michael-X\Documents\Visual Studio 2012\Projects\QuestionTosser\QuestionTosser\obj\Debug\QuestionTosser.csprojResolveAssemblyReference.cache
 C:\Users\Michael-X\Documents\Visual Studio 2012\Projects\QuestionTosser\QuestionTosser\obj\Debug\QuestionTosser.dll
 C:\Users\Michael-X\Documents\Visual Studio 2012\Projects\QuestionTosser\QuestionTosser\obj\Debug\QuestionTosser.pdb
+C:\Users\Michael-X\Documents\Visual Studio 2012\Projects\QuestionTosser\QuestionTosser\obj\Debug\QuestionTosser.csprojResolveAssemblyReference.cache
