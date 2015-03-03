@@ -21,6 +21,10 @@ namespace QuestionTosser.Controllers
             string pUName = Request.Form["username"];
             string pPass = Request.Form["password"];
             string pName = Request.Form["name"];
+            if (pUName==String.Empty || pPass==String.Empty || pName==String.Empty)
+            {
+                return Json(new { msg="Invalid input", status="RegisterPFailInvalidInput"});
+            }
             byte[] salt;
             try
             {
@@ -33,7 +37,7 @@ namespace QuestionTosser.Controllers
                     OdbcDataReader reader = comm.ExecuteReader();
                     if (reader.HasRows)
                     {
-                        return Json(new { msg = "This username already exists", status = "FailUserExists" });
+                        return Json(new { msg = "This username already exists", status = "RegisterPFailUserExists" });
                     }
                     reader.Close();
                     comm.Parameters.Clear();
@@ -74,6 +78,10 @@ namespace QuestionTosser.Controllers
 
             string pName = Request.Form["username"];
             string pPass = Request.Form["password"];
+            if (pName == String.Empty || pPass == String.Empty)
+            {
+                return Json(new { msg="Invalid input", status="LoginPFailInvalidInput"});
+            }
             try
             {
 
@@ -140,95 +148,56 @@ namespace QuestionTosser.Controllers
                 string pID = ((Dictionary<string, string>)(Session["professor"]))["id"];
                 string pCName = Request.Form["classname"];
                 string cCode = Request.Form["code"];
+                if (pCName == String.Empty || cCode == String.Empty)
+                {
+                    return Json(new { msg="Invalid input", status="StartClassFailInvalidInput"});
+                }
                 try
                 {
                     using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["QuestionTosserMySQLDBConnection"].ConnectionString))
                     {
                         conn.Open();
-                        
-                        
-                        //string sqlStr = "SELECT * FROM `class` WHERE prof_id=? && name=?";
-                        //OdbcCommand comm = new OdbcCommand(sqlStr, conn);
-                        //comm.Parameters.AddWithValue("profID", pID);
-                        //comm.Parameters.AddWithValue("name", pName);
-                        //OdbcDataReader reader = comm.ExecuteReader();
-                        //if (reader.HasRows)
-                        //{
-                        //    reader.Read();
-                        //    Int32 classID = (Int32)reader["class_id"];
-                        //    comm.Parameters.Clear();
-                        //    reader.Close();
+                        string sqlStr= "INSERT INTO `class`(name, prof_id, code) VALUES(?, ?, ?);";
+                        OdbcCommand comm = new OdbcCommand(sqlStr, conn);
 
-                        //    sqlStr = "UPDATE TABLE `class` SET ongoing=1, code=? WHERE class_id=?";
-                        //    comm.CommandText = sqlStr;
-                        //    comm.Parameters.AddWithValue("classCode", cCode);
-                        //    comm.Parameters.AddWithValue("classID", classID);
+                        OdbcTransaction tran = conn.BeginTransaction();
+                        comm.Transaction = tran;
 
-                        //    int rowsAffected = comm.ExecuteNonQuery();
-                        //    if (rowsAffected == 1)
-                        //    {
-                        //        return Json(new
-                        //        {
-                        //            msg = "Success",
-                        //            status = "StartClassSucceed",
-                        //            classname= pCName, 
-                        //            classID=classID, 
-                        //            code = cCode
-                        //        });
-                        //    }
-                        //    else
-                        //    {
-                        //        return Json(new { msg = "Didn't update", status = "StartClassFailUnknown" });
-                        //    }
-                        //}
-                        //else
-                        {
-                            
-                            //comm.Parameters.Clear();
-                            //reader.Close();
+                        comm.Parameters.AddWithValue("name", pCName);
+                        comm.Parameters.AddWithValue("profID", pID);
+                        comm.Parameters.AddWithValue("code", cCode);
+                        OdbcDataReader reader=comm.ExecuteReader();
 
-                            
-                            string sqlStr= "INSERT INTO `class`(name, prof_id, code) VALUES(?, ?, ?);";
-                            OdbcCommand comm = new OdbcCommand(sqlStr, conn);
+                        comm.Parameters.Clear();
+                        reader.Close();
 
-                            OdbcTransaction tran = conn.BeginTransaction();
-                            comm.Transaction = tran;
+                        sqlStr = "SELECT LAST_INSERT_ID();";
+                        comm.CommandText = sqlStr;
 
-                            comm.Parameters.AddWithValue("name", pCName);
-                            comm.Parameters.AddWithValue("profID", pID);
-                            comm.Parameters.AddWithValue("code", cCode);
-                            OdbcDataReader reader=comm.ExecuteReader();
+                        Int32 classID = Convert.ToInt32(comm.ExecuteScalar());
 
-                            comm.Parameters.Clear();
-                            reader.Close();
+                        tran.Commit();
 
-                            sqlStr = "SELECT LAST_INSERT_ID();";
-                            comm.CommandText = sqlStr;
-
-                            Int32 classID = Convert.ToInt32(comm.ExecuteScalar());
-
-                            tran.Commit();
-
-                            return Json(new 
-                            { 
-                                msg = "Success",
-                                status = "StartClassSucceed",  
-                                classname = pCName,
-                                classID = classID,
-                                code = cCode
-                            });
-                        }
+                        return Json(new 
+                        { 
+                            msg = "Success",
+                            status = "StartClassSucceed",  
+                            classname = pCName,
+                            classID = classID,
+                            code = cCode
+                        });
                     }
+                    
                 }
                 catch (OdbcException e)
                 {
                     System.Diagnostics.Debug.WriteLine(e.Message);
-                    return Json(new { msg = "Something about database went wrong", status="ClassStartFailDB"});
+                    return Json(new { msg = "Something about database went wrong", status="StartClassFailDB"});
                 }
             }
             else if (Session == null || Session["professor"] == null)
             {
-                return Json(new { msg = "Professor not logged in", status = "StartClassPFailNotLoggedIn" });
+                return Json(new { msg = "Professor not logged in", status = "StartClassFailNotLoggedIn" });
             }
             else
             {

@@ -154,6 +154,24 @@
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
     <Content Include="Scripts\main.js" />
+    <Content Include="Vendors\sweetalert\.gitignore" />
+    <Content Include="Vendors\sweetalert\example\example.css" />
+    <Content Include="Vendors\sweetalert\example\images\logo_big%402x.png" />
+    <Content Include="Vendors\sweetalert\example\images\logo_big.png" />
+    <Content Include="Vendors\sweetalert\example\images\logo_small%402x.png" />
+    <Content Include="Vendors\sweetalert\example\images\logo_small.png" />
+    <Content Include="Vendors\sweetalert\example\images\te-logo-small.svg" />
+    <Content Include="Vendors\sweetalert\example\images\thumbs-up.jpg" />
+    <Content Include="Vendors\sweetalert\example\images\vs_icon%402x.png" />
+    <Content Include="Vendors\sweetalert\example\images\vs_icon.png" />
+    <Content Include="Vendors\sweetalert\example\index.html" />
+    <Content Include="Vendors\sweetalert\gulpfile.js" />
+    <Content Include="Vendors\sweetalert\lib\ie9.css" />
+    <Content Include="Vendors\sweetalert\lib\sweet-alert.css" />
+    <Content Include="Vendors\sweetalert\lib\sweet-alert.html" />
+    <Content Include="Vendors\sweetalert\lib\sweet-alert.js" />
+    <Content Include="Vendors\sweetalert\lib\sweet-alert.min.js" />
+    <Content Include="Vendors\sweetalert\sweetalert.gif" />
     <Content Include="Styles\base.css" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -167,6 +185,14 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\Index.cshtml" />
     <Content Include="Views\Shared\ClassRoom.cshtml" />
+    <Content Include="Vendors\sweetalert\.editorconfig" />
+    <Content Include="Vendors\sweetalert\bower.json" />
+    <Content Include="Vendors\sweetalert\example\example.scss" />
+    <Content Include="Vendors\sweetalert\lib\.sass-cache\7981e80cc38cc883c439302cccda55b50fb7fde4\sweet-alert.scssc" />
+    <Content Include="Vendors\sweetalert\lib\sweet-alert.scss" />
+    <Content Include="Vendors\sweetalert\LICENSE" />
+    <Content Include="Vendors\sweetalert\package.json" />
+    <Content Include="Vendors\sweetalert\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

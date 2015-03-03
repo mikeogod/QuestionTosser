@@ -19,6 +19,10 @@ namespace QuestionTosser.Controllers
         {
             string sUName = Request.Form["username"];
             string sPass = Request.Form["password"];
+            if (sUName == String.Empty || sPass == String.Empty)
+            {
+                return Json(new { msg = "Invalid input", status = "RegisterSFailInvalidInput" });
+            }
             byte[] salt;
             try
             {
@@ -31,7 +35,7 @@ namespace QuestionTosser.Controllers
                     OdbcDataReader reader = comm.ExecuteReader();
                     if (reader.HasRows)
                     {
-                        return Json(new { msg = "This username already exists", status = "FailUserExists" });
+                        return Json(new { msg = "This username already exists", status = "RegisterSFailUserExists" });
                     }
                     reader.Close();
                     comm.Parameters.Clear();
@@ -65,11 +69,16 @@ namespace QuestionTosser.Controllers
                 return Json(new { msg = "Something went wrong", status = "RegisterSFailGen" });
             }
         }
+
         [HttpPost]
         public JsonResult StudentLogin()
         {
             string sUName = Request.Form["username"];
             string sPass = Request.Form["password"];
+            if (sUName == String.Empty || sPass == String.Empty)
+            {
+                return Json(new { msg = "Invalid input", status = "LoginSFailInvalidInput" });
+            }
             try
             {
 
@@ -117,31 +126,47 @@ namespace QuestionTosser.Controllers
         [HttpPost]
         public JsonResult JoinClass()
         {
-            string code = (String)(Request.Form["code"]);
-            
-            try
-            {
 
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["QuestionTosserMySQLDBConnection"].ConnectionString))
+            if (Session != null && Session["student"] != null)
+            {
+                string code = (String)(Request.Form["code"]);
+                if (code == String.Empty)
                 {
-                    conn.Open();
-                    string sqlStr = "SELECT prof_connection_id FROM `class` WHERE `code`= ?";
-                    OdbcCommand comm = new OdbcCommand(sqlStr, conn);
-                    comm.Parameters.AddWithValue("code", code);
-                    OdbcDataReader reader = comm.ExecuteReader();
-                    if (reader.HasRows)
+                    return Json(new { msg = "Invalid input", status = "JoinClassFailInvalidInput" });
+                }
+                try
+                {
+                    using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["QuestionTosserMySQLDBConnection"].ConnectionString))
                     {
-                        reader.Read();
-                        return Json(new { msg = "Join succeed", status = "JoinClassSucceed", profConnID=(String)reader["prof_connection_id"] });
-                    }
-                    else
-                    {
-                        return Json(new { msg = "Wrong code", status="JoinClassFailWrongCode" });
+                        conn.Open();
+                        string sqlStr = "SELECT prof_connection_id FROM `class` WHERE `code`= ?";
+                        OdbcCommand comm = new OdbcCommand(sqlStr, conn);
+                        comm.Parameters.AddWithValue("code", code);
+                        OdbcDataReader reader = comm.ExecuteReader();
+                        if (reader.HasRows)
+                        {
+                            reader.Read();
+                            return Json(new { msg = "Join succeed", status = "JoinClassSucceed", profConnID = (String)reader["prof_connection_id"] });
+                        }
+                        else
+                        {
+                            return Json(new { msg = "Wrong code", status = "JoinClassFailWrongCode" });
+                        }
                     }
                 }
-            }catch(OdbcException e){
-                System.Diagnostics.Debug.WriteLine(e.Message);
-                return Json(new { msg = "Something about database went wrong", status = "JoinClassFailDB" });
+                catch (OdbcException e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    return Json(new { msg = "Something about database went wrong", status = "JoinClassFailDB" });
+                }
+            }
+            else if (Session == null || Session["student"] == null)
+            {
+                return Json(new { msg = "Student not logged in", status = "JoinClassFailNotLoggedIn" });
+            }
+            else
+            {
+                return Json(new { msg = "Unknown state", status = "Unknown" });
             }
         }
     }

@@ -84,6 +84,11 @@ namespace SignalRChat
             Clients.Client(profConnID).postQuestion(name+" asked: "+question);
         }
 
-
+        [HubMethodName("DisconnectClient")]
+        public void DisconnectClient()
+        {
+            Clients.Caller.stopConnection();
+        }
+        
     }
 }
