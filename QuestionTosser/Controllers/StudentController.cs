@@ -145,6 +145,7 @@ namespace QuestionTosser.Controllers
                         OdbcDataReader reader = comm.ExecuteReader();
                         if (reader.HasRows)
                         {
+
                             reader.Read();
                             return Json(new { msg = "Join succeed", status = "JoinClassSucceed", profConnID = (String)reader["prof_connection_id"] });
                         }
