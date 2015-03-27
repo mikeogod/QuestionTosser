@@ -53,6 +53,9 @@
             <div id="question-panel" class="col-md-8 col-md-offset-2">
                 <form>
                     <input id="question" type="text" placeholder="Question" />
+                    <div class="input-group pull-right">
+                        <label>Anonymous</label><input id="anonymous" type="checkbox" />
+                     </div>
                     <input id="toss-question" type="button" name="submit" value="Toss" />
                 </form>
             </div>
@@ -160,8 +163,23 @@
 
         
             
-        QuestionTosser.Main=$(function () {
-            
+        QuestionTosser.Main = $(function () {
+            //These are simplified names for commonly used elements
+            var className = $("#professor-panel input[name='classname']");
+            var profCode = $("#professor-panel input[name='code']");
+            var profUserName = $("#professor-panel input[name='username']");
+            var studCode = $("#student-panel input[name='code']");
+            var profConnID = $("#student-panel input[name='prof-conn-id']");
+            var studUserName = $("#student-panel input[name='username']");
+            var question = $("#question");
+            var anonymous = $("#anonymous");
+            var registerName = $("#register-panel input[name='username']");
+            var registerPass = $("#register-panel input[name='password']");
+            var registerRealName = $("#register-panel input[name='name']");
+            var studentLoginName = $("#student-login-panel input[name='username']");
+            var studentLoginPass = $("#student-login-panel input[name='password']");
+            var professorLoginName = $("#professor-login-panel input[name='username']");
+            var professorLoginPass = $("#professor-login-panel input[name='password']");
             
             @{
                 if(Session["professor"]==null && Session["student"]==null)
@@ -170,6 +188,7 @@
                 }
                 else if(Session["student"]!=null)
                 {
+                    @:studUserName.val("@(((Dictionary<string, string>)(Session["student"]))["username"])");
                     @:QuestionTosser.StudentPage();
                 }
                 else
@@ -189,20 +208,7 @@
                 document.getElementById('question-audio').play();
             };
             
-            var className=$("#professor-panel input[name='classname']");
-            var profCode = $("#professor-panel input[name='code']");
-            var profUserName = $("#professor-panel input[name='username']");
-            var studCode = $("#student-panel input[name='code']");
-            var profConnID = $("#student-panel input[name='prof-conn-id']");
-            var studUserName = $("#student-panel input[name='username']");
-            var question = $("#question");
-            var registerName=$("#register-panel input[name='username']");
-            var registerPass=$("#register-panel input[name='password']");
-            var registerRealName=$("#register-panel input[name='name']");
-            var studentLoginName = $("#student-login-panel input[name='username']");
-            var studentLoginPass = $("#student-login-panel input[name='password']");
-            var professorLoginName = $("#professor-login-panel input[name='username']");
-            var professorLoginPass = $("#professor-login-panel input[name='password']");
+            
 
             //Start class
             $("#professor-panel input[name='start-class']").on("click", function () {
@@ -266,13 +272,14 @@
                             // Start the connection for students
                             $.connection.hub.start().done(function () {
                                 $('#toss-question').click(function () {
-                                    chat.server.Toss(studUserName.val(), question.val(), profConnID.val());
+                                    
+                                    chat.server.Toss(question.val(), profConnID.val(), studUserName.val(), anonymous.prop("checked"));
                                     // Clear text box and reset focus for next question. 
                                     $('#question').val('').focus();
                                 });
                             });
                             QuestionTosser.JoinSucceed();
-                            swal({ title: "Success!", text: "You have successfully join the class!", type: "success", confirmButtonText: "Cool" });
+                            swal({ title: "Success!", text: "You have successfully joined the class!", type: "success", confirmButtonText: "Cool" });
 
                         }
                         else {
@@ -332,6 +339,7 @@
                         if (data["status"] == "LoginSSucceed") {
                             swal({ title: "Success!", text: "Student you have successfully logged in!", type: "success", confirmButtonText: "Cool" });
                             QuestionTosser.StudentPage();
+                            chat.state.userName = studentLoginName.val();
                         }
                         else {
                             alert(data["msg"]);

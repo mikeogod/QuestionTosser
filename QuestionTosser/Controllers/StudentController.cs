@@ -104,7 +104,10 @@ namespace QuestionTosser.Controllers
                                 {"username", (string)reader["username"]},
                                 {"id", reader["id"].ToString()}
                             });
-                            return Json(new { msg = "Success!", status = "LoginSSucceed" });
+                            return Json(new { 
+                                msg = "Success!", 
+                                status = "LoginSSucceed"
+                            });
                         }
                         else
                         {

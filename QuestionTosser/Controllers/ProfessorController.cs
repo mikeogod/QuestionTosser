@@ -152,16 +152,29 @@ namespace QuestionTosser.Controllers
                 {
                     return Json(new { msg="Invalid input", status="StartClassFailInvalidInput"});
                 }
+                
                 try
                 {
                     using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["QuestionTosserMySQLDBConnection"].ConnectionString))
                     {
                         conn.Open();
-                        string sqlStr= "INSERT INTO `class`(name, prof_id, code) VALUES(?, ?, ?);";
-                        OdbcCommand comm = new OdbcCommand(sqlStr, conn);
-
                         OdbcTransaction tran = conn.BeginTransaction();
-                        comm.Transaction = tran;
+                        string sqlStr = "SELECT COUNT(*) FROM `class` WHERE code=?";
+                        OdbcCommand comm = new OdbcCommand(sqlStr, conn, tran);
+
+                        //See if there is a same code
+                        comm.Parameters.AddWithValue("code", cCode);
+                        if(Convert.ToInt32(comm.ExecuteScalar()) != 0)
+                        {
+                            return Json(new { 
+                                msg = "This code conflicts with another ongoing class", status="StartClassFailCodeDuplicate"
+                            });
+                        }
+                        comm.Parameters.Clear();
+
+                        //Insert the class data
+                        sqlStr = "INSERT INTO `class`(name, prof_id, code) VALUES(?, ?, ?);";
+                        comm.CommandText = sqlStr;
 
                         comm.Parameters.AddWithValue("name", pCName);
                         comm.Parameters.AddWithValue("profID", pID);
@@ -171,9 +184,9 @@ namespace QuestionTosser.Controllers
                         comm.Parameters.Clear();
                         reader.Close();
 
+                        //Obtain the class id
                         sqlStr = "SELECT LAST_INSERT_ID();";
                         comm.CommandText = sqlStr;
-
                         Int32 classID = Convert.ToInt32(comm.ExecuteScalar());
 
                         tran.Commit();

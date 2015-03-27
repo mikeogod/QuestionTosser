@@ -71,17 +71,18 @@ namespace SignalRChat
         }
 
         [HubMethodName("Toss")]
-        public void Toss(string name, string question, string profConnID)
+        public void Toss(string question, string profConnID, string userName, bool anonymous=false)
         {
-            if (name == "")
+
+            if (anonymous)
             {
-                name = "Anonymous";
+                userName = "Anonymous";
             }
-            if (question == "" || profConnID=="")
+            if (question == "" || profConnID=="" || userName=="")
             {
                 return;
             }
-            Clients.Client(profConnID).postQuestion(name+" asked: "+question);
+            Clients.Client(profConnID).postQuestion(userName+" asked: "+question);
         }
 
         [HubMethodName("DisconnectClient")]
