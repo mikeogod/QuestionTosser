@@ -1,0 +1,16 @@
+Besides the libraries that come with application itself, 
+it's recommended that you get several other installations:
+
+Visual Studio 2012+
+.NET 4.5+
+IIS Express
+Git clients
+SignalR 2.0+
+XAMPP v3.2.1+
+MySQL ODBC Driver 3.x/5.x
+
+Configurations required to run the application on an LAN:
+See: http://johan.driessen.se/posts/Accessing-an-IIS-Express-site-from-a-remote-computer
+Also, additional configuration on the Windows Firewall maybe required.
+
+<Still need to address issues around MySql driver>

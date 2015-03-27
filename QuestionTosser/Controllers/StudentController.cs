@@ -17,6 +17,7 @@ namespace QuestionTosser.Controllers
         [HttpPost]
         public JsonResult StudentRegister()
         {
+            
             string sUName = Request.Form["username"];
             string sPass = Request.Form["password"];
             if (sUName == String.Empty || sPass == String.Empty)
