@@ -100,13 +100,15 @@ namespace QuestionTosser.Controllers
                         if (((String)reader["password"]) == sPass)
                         {
                             Session.RemoveAll();
-                            Session.Add("student", new Dictionary<string, string>{ 
+                            var student=new Dictionary<string, string>{ 
                                 {"username", (string)reader["username"]},
                                 {"id", reader["id"].ToString()}
-                            });
+                            };
+                            Session.Add("student", student);
                             return Json(new { 
                                 msg = "Success!", 
-                                status = "LoginSSucceed"
+                                status = "LoginSSucceed",
+                                user = student
                             });
                         }
                         else

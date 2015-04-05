@@ -6,7 +6,7 @@
 <html>
 <head>
     <title>SignalR Simple Chat</title>
-    <link rel="shortcut icon" href="~/PageResources/Images/Logos/logo1.jpg">
+    <link rel="shortcut icon" href="~/PageResources/Images/Logos/logo2.png">
     <!--Bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
@@ -20,7 +20,7 @@
         
         <div class="row">
             <div class="col-md-5 col-md-offset-1">
-                <img class="img-responsive img-rounded" src="~/PageResources/Images/Logos/logo1.jpg">
+                <img class="img-responsive img-rounded" src="~/PageResources/Images/Logos/logo2.png">
             </div>
             <div id="register-panel" class="col-md-5">
                 <form>
@@ -143,6 +143,7 @@
     <!--Script references. -->
     <!--Reference the jQuery library. -->
     <script src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <!--JQueryUI-->
     <script src="~/Scripts/jquery-ui.min.js"></script>
     <!--Bootstrap-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
@@ -155,14 +156,8 @@
     <!--Custom-->
     <script src="~/Scripts/main.js"></script>
     <script type="text/javascript">
-
-        
-
-
         var QuestionTosser = QuestionTosser || {};
 
-        
-            
         QuestionTosser.Main = $(function () {
             //These are simplified names for commonly used elements
             var className = $("#professor-panel input[name='classname']");
@@ -205,7 +200,33 @@
                 var encodedMsg = $('<div />').text(q).html();
                 // Add the message to the page. 
                 $('#questions').append('<li>' + encodedMsg + '</li>');
+                // Play the notification sound
                 document.getElementById('question-audio').play();
+                // Check if the current window is active. If not, show a desktop notification
+                if (/*window.self !== window.top*/ true) {
+                    //check if the Notification is enabled
+                    if ("Notification" in window) {
+                        //ask for notification permission
+                        if (Notification.permission !== "granted") {
+                            Notification.requestPermission(function (result) {
+                                if (result !== "granted") {
+                                    console.log("The permission is not granted");
+                                }
+                                else {
+                                    var notification = new Notification("Question", { body: encodedMsg, icon:"@Url.Content("~/PageResources/Images/question_mark.jpg")" });
+                                }
+                            });
+                        }
+                        else {
+                            var notification = new Notification("Question", { body: encodedMsg, icon:"@Url.Content("~/PageResources/Images/question_mark.jpg")" });
+                        }
+                    }
+                    else {
+                        //Notification not supported
+                        //alert("Notification not supported");
+                    }
+                }
+                
             };
             
             
@@ -337,9 +358,10 @@
                     data: { username: studentLoginName.val(), password: studentLoginPass.val() },
                     success: function (data, textStatus, jqXHR) {
                         if (data["status"] == "LoginSSucceed") {
+                            studUserName.val(data["user"]["username"]);
                             swal({ title: "Success!", text: "Student you have successfully logged in!", type: "success", confirmButtonText: "Cool" });
                             QuestionTosser.StudentPage();
-                            chat.state.userName = studentLoginName.val();
+                            
                         }
                         else {
                             alert(data["msg"]);

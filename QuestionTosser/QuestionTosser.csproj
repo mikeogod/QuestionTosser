@@ -143,12 +143,12 @@
     <Content Include="PageResources\Images\checkboxbg.gif" />
     <Content Include="PageResources\Images\Logos\logo1.jpg" />
     <Content Include="Global.asax" />
-    <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="PageResources\Images\default.jpg" />
+    <Content Include="PageResources\Images\Logos\logo2.jpg" />
+    <Content Include="PageResources\Images\Logos\logo2.png" />
+    <Content Include="PageResources\Images\question_mark.jpg" />
     <Content Include="PageResources\Images\select.gif" />
     <Content Include="Scripts\jquery-1.11.1.min.js" />
-    <Content Include="Scripts\jquery-1.6.4.js" />
-    <Content Include="Scripts\jquery-1.6.4.min.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.fitvids.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
