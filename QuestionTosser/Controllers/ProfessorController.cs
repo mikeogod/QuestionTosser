@@ -53,6 +53,8 @@ namespace QuestionTosser.Controllers
                     int rowsAffected = comm.ExecuteNonQuery();
                     if (rowsAffected == 1)
                     {
+                        //Send an email verification
+                        
                         return Json(new { msg = "Success", status = "RegisterPSucceed" });
                     }
                     else

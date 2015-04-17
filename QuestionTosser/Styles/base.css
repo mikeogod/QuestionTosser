@@ -1,8 +1,12 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
 
+p{
+ display: inline-block;
+} 
+
 .button{
   width:100px;
-  background:#3399cc;
+  background:rgba(51, 153, 241, 0.2);
   display:block;
   margin:0 auto;
   margin-top:1%;
@@ -16,7 +20,7 @@
 }
 
 .button:hover{
-  background:#2288bb;
+  background:rgba(34, 136, 187, 1);
 }
 
 #professor-login-panel, #student-login-panel, #register-panel, #student-panel, #question-panel, #professor-panel, #logout-panel{
@@ -138,5 +142,11 @@ a.radio-deselect {
 
 .radiolist-text {
     font-size:150%;
+}
+
+.enlarged-list-item {
+    font-size:130%;
+    padding-top: 3%;
+    padding-bottom: 3%;
 }
 

@@ -20,7 +20,7 @@
         
         <div class="row">
             <div class="col-md-5 col-md-offset-1">
-                <img class="img-responsive img-rounded" src="~/PageResources/Images/Logos/logo2.png">
+                <img id="main-logo" class="img-responsive img-rounded" src="~/PageResources/Images/Logos/logo2.png">
             </div>
             <div id="register-panel" class="col-md-5">
                 <form>
@@ -89,7 +89,7 @@
             <div id="questions-panel" class="col-md-8 col-md-offset-2">
                 <h1>Questions</h1>
                 <div class="panel panel-default">
-                    <ul id="questions">
+                    <ul id="questions" class="list-group">
                     </ul>
                 </div>
             </div>
@@ -199,7 +199,12 @@
                 // Html encode display name and message. 
                 var encodedMsg = $('<div />').text(q).html();
                 // Add the message to the page. 
-                $('#questions').append('<li>' + encodedMsg + '</li>');
+                var newQuestion = $('<li class="list-group-item enlarged-list-item">' + encodedMsg + '</li>').hide();
+                    //
+                    //alert($('#questions').children().length);
+                    $('#questions').append(newQuestion);
+                    newQuestion.show('highlight', {}, 500);
+                
                 // Play the notification sound
                 document.getElementById('question-audio').play();
                 // Check if the current window is active. If not, show a desktop notification
@@ -228,7 +233,11 @@
                 }
                 
             };
-            
+
+            //Show notification that the hub sends to the clients
+            chat.client.Notification = function (notification) {
+                swal({title:"Notification", text:notification, type: null});
+            };
             
 
             //Start class
@@ -244,6 +253,7 @@
                             $.connection.hub.start().done(function () {
                                 chat.server.StartClass(data["classID"]);
                                 QuestionTosser.StartSucceed();
+                                $('#questions').empty();
                                 swal({ title: "Success!", text: "You have successfully started a class! The code:\n" + data["code"], type: "success", confirmButtonText: "Cool" });
                             });
                         }
@@ -258,12 +268,12 @@
             $("#professor-panel input[name='end-class']").on('click', function () {
                 swal({
                     title: "Are you sure?",
-                    text: "You will lose all the current connections!",
+                    text: "You will lose all the current students!",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel plx!",
+                    confirmButtonText: "Yes,  end my class",
+                    cancelButtonText: "No,  go back plx!",
                     closeOnConfirm: false,
                     closeOnCancel: false
                 },
@@ -274,7 +284,7 @@
                         QuestionTosser.EndSucceed();
                         swal("Ended!", "You have ended the class", "success");
                     } else {
-                        swal("Cancelled", "You can continue the class now", "error");
+                        swal("Cancelled", "You can continue the class now");
                     }
                 });
                 
@@ -349,6 +359,7 @@
                 }
             });
 
+
             //Student login
             $("#student-login-panel input[name='submit']").on("click", function () {
                 $.ajax({
@@ -359,8 +370,11 @@
                     success: function (data, textStatus, jqXHR) {
                         if (data["status"] == "LoginSSucceed") {
                             studUserName.val(data["user"]["username"]);
-                            swal({ title: "Success!", text: "Student you have successfully logged in!", type: "success", confirmButtonText: "Cool" });
-                            QuestionTosser.StudentPage();
+                            QuestionTosser.HideAllTransition(function () {
+                                swal({ title: "Success!", text: "Student you have successfully logged in!", type: "success", confirmButtonText: "Cool" }, function () {
+                                    QuestionTosser.StudentPage();
+                                });
+                            });
                             
                         }
                         else {
@@ -379,8 +393,12 @@
                     data: { username: professorLoginName.val(), password: professorLoginPass.val() },
                     success: function (data, textStatus, jqXHR) {
                         if (data["status"] == "LoginPSucceed") {
-                            swal({ title: "Success!", text: "Professor you have successfully logged in!", type: "success", confirmButtonText: "Cool" });
-                            QuestionTosser.ProfessorPage();
+                            QuestionTosser.HideAllTransition(function () {
+                                swal({ title: "Success!", text: "Professor you have successfully logged in!", type: "success", confirmButtonText: "Cool" }, function () {
+                                    QuestionTosser.ProfessorPage();
+                                });
+                                
+                            });
                         }
                         else {
                             alert(data["msg"]);

@@ -1,10 +1,35 @@
 ﻿var QuestionTosser = QuestionTosser || {};
 QuestionTosser.HideAll = function () {
-    $("#question-panel, #professor-panel, #student-panel, #questions-panel, #student-login-panel,"+ 
-        "#professor-login-panel, #register-panel, #about-panel, #logout-panel").hide();
+    $("#main-logo, #question-panel, #professor-panel, #student-panel, #questions-panel, #student-login-panel," +
+        "#professor-login-panel, #register-panel, #about-panel, #logout-panel").hide({ effect: 'fade', easing: 'linear', duration: 0 });
+            
+};
+QuestionTosser.HideAllTransition = function (callback) {
+    if (typeof callback === 'undefined') callback = function () { alert(); };
+    var displayedElements=$("#question-panel, #professor-panel, #student-panel, #questions-panel, #student-login-panel," +
+        "#professor-login-panel, #register-panel, #about-panel, #logout-panel").filter(function (index, domObj) {
+            return $(domObj).css('display') !== 'none';
+        });
+    
+    displayedElements.each(function (index, domObj) {
+        if (index !== displayedElements.length - 1)
+        {
+            $(domObj).hide({ effect: 'blind', easing: 'linear', duration: 500 });
+        }
+        else /*(index == elementCount - 1)*/ {
+            $(domObj).hide({
+                effect: 'blind', easing: 'linear', duration: 500, complete: function () {
+                    $("#main-logo").hide({ effect: 'fade', easing: 'linear', duration: 500 });
+                    callback();
+                }
+            });
+        }
+    });
+
 };
 QuestionTosser.AnonymousPage = function () {
     QuestionTosser.HideAll();
+    $("#main-logo").show();
     $("#about-panel").show();
     $("#student-login-panel").show();
     $("#professor-login-panel").show();
