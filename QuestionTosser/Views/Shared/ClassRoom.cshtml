@@ -17,119 +17,135 @@
 </head>
 <body>
     <div class="container">
-        
+
         <div class="row">
             <div class="col-md-5 col-md-offset-1">
                 <img id="main-logo" class="img-responsive img-rounded" src="~/PageResources/Images/Logos/logo2.png">
             </div>
-            <div id="register-panel" class="col-md-5">
-                <form>
-                    <input name="username" type="text"  placeholder="Username" />
-                    <input name="password" type="password" placeholder="Password" />
-                    <input name="password-again" type="password" placeholder="Password Again" />
-                    <input name="name" type="text" placeholder="Your name(only required for professor)" />
-                    <label>You are:</label>
-                    <div class="clearfix radiolist">
-                        <p>
-                            <input name="role" type="radio" value="professor" />
-                            <span class="radiolist-text">Professor</span>
-                            <a class="radio-select" href="#">Select</a>
-                            <a class="radio-deselect" href="#">Cancel</a>
-                        </p>
-                        <p>
-                            <input name="role" type="radio" value="student" />
-                            <span class="radiolist-text">Student</span>
-                            <a class="radio-select" href="#">Select</a>
-                            <a class="radio-deselect" href="#">Cancel</a>
-                        </p>
-                    </div>
-                    
-                    <input type="button" name="submit" value="Register" />
-                </form>
-            </div>
-        </div>
+            <div class="col-md-5">
+                <div id="register-panel">
+                    <form>
+                        <input name="username" type="text" placeholder="Username" />
+                        <input name="password" type="password" placeholder="Password" />
+                        <input name="password-again" type="password" placeholder="Password Again" />
+                        <input name="name" type="text" placeholder="Your name(only required for professor)" />
+                        <label>You are:</label>
+                        <div class="clearfix radiolist">
+                            <p>
+                                <input name="role" type="radio" value="professor" />
+                                <span class="radiolist-text">Professor</span>
+                                <a class="radio-select" href="#">Select</a>
+                                <a class="radio-deselect" href="#">Cancel</a>
+                            </p>
+                            <p>
+                                <input name="role" type="radio" value="student" />
+                                <span class="radiolist-text">Student</span>
+                                <a class="radio-select" href="#">Select</a>
+                                <a class="radio-deselect" href="#">Cancel</a>
+                            </p>
+                        </div>
 
-        <div class="row">
-            <div id="question-panel" class="col-md-8 col-md-offset-2">
-                <form>
-                    <input id="question" type="text" placeholder="Question" />
-                    <div class="input-group pull-right">
-                        <label>Anonymous</label><input id="anonymous" type="checkbox" />
-                     </div>
-                    <input id="toss-question" type="button" name="submit" value="Toss" />
-                </form>
-            </div>
-        </div>
-
-        <div class="row">
-            <div id="professor-panel" class="col-md-8 col-md-offset-2">
-                <form>
-                    <input name="classname" type="text" placeholder="class name" />
-                    <input name="code" type="text" placeholder="code" />
-                    <input name="start-class" type="button" value="Start Class" />
-                    <input name="end-class" type="button" value="End Class" />
-                </form>
-                <input name="username" type="hidden" />
-                
-            </div>
-        </div>
-
-        <div class="row">
-            <div id="student-panel" class="col-md-8 col-md-offset-2">
-                <form>
-                    <input name="code" type="text" placeholder="code" />
-                    <input name="submit" type="button" value="Join" />
-                </form>
-                <input name="username" type="hidden" />
-                <input name="prof-conn-id" type="hidden" />
-            </div>
-        </div>
-
-        <div class="row">
-            <div id="questions-panel" class="col-md-8 col-md-offset-2">
-                <h1>Questions</h1>
-                <div class="panel panel-default">
-                    <ul id="questions" class="list-group">
-                    </ul>
+                        <input type="button" name="submit" value="Register" />
+                    </form>
                 </div>
             </div>
         </div>
 
-        <div id="login-panel" class="row">
-            <div id="student-login-panel" class="col-md-5 col-md-offset-1">
-                <h1>Student</h1>
-                <form>
-                    <input name="username" type="text" placeholder="Username" />
-                    <input name="password" type="password" placeholder="Password" />
-                    <input name="submit" type="button" value="Log in" />
-                </form>
-            </div>
-            <div id="professor-login-panel" class="col-md-5">
-                <h1>Professor</h1>
-                <form>
-                    <input name="username" type="text" placeholder="Username" />
-                    <input name="password" type="password" placeholder="Password" />
-                    <input name="submit" type="button" value="Log in" />
-                </form>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div id="question-panel">
+                    <form>
+                        <input id="question" type="text" placeholder="Question" />
+                        <div class="input-group pull-right">
+                            <label>Anonymous</label><input id="anonymous" type="checkbox" />
+                        </div>
+                        <input id="toss-question" type="button" name="submit" value="Toss" />
+                    </form>
+                </div>
             </div>
         </div>
 
         <div class="row">
-            <div id="about-panel" class="col-md-8 col-md-offset-2">
-                <h3>About:</h3>
-                <p>Question tosser is a web application that helps shy students participate more freely in the classroom and helps professors build more interactive classroom atmosphere. During a class, after the students and the professor log into the application, students can "toss" a question to the professor, who will receive the message immediately along with a loud notification sound. All the questions will be saved so that after class the professor can answer questions individually to the students who asked the questions.</p>
-                <p>Question Tosser is built with ASP.NET MVC and SignalR technologies with WebSockets under the cover.</p> 
-                <p>Other technologies used include: C#, Javascript, AJAX, JQuery, MySQL, etc.</p>
-                <p>Github repo: https://github.com/mikeogod/QuestionTosser</p>
-             
+            <div class="col-md-8 col-md-offset-2">
+                <div id="professor-panel">
+                    <form>
+                        <input name="classname" type="text" placeholder="class name" />
+                        <input name="code" type="text" placeholder="code" />
+                        <input name="start-class" type="button" value="Start Class" />
+                        <input name="end-class" type="button" value="End Class" />
+                    </form>
+                    <input name="username" type="hidden" />
+                </div>
             </div>
         </div>
 
         <div class="row">
-            <div id="logout-panel" class="col-md-8 col-md-offset-2">
-                <form>
-                    <input name="logout" type="button" value="logout"/>
-                </form>
+            <div class="col-md-8 col-md-offset-2">
+                <div id="student-panel">
+                    <form>
+                        <input name="code" type="text" placeholder="code" />
+                        <input name="submit" type="button" value="Join" />
+                    </form>
+                    <input name="username" type="hidden" />
+                    <input name="prof-conn-id" type="hidden" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div id="questions-panel">
+                    <div class="panel panel-default">
+                        <ul id="questions" class="list-group">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5 col-md-offset-1">
+                <div id="student-login-panel">
+                    <h1>Student</h1>
+                    <form>
+                        <input name="username" type="text" placeholder="Username" />
+                        <input name="password" type="password" placeholder="Password" />
+                        <input name="submit" type="button" value="Log in" />
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div id="professor-login-panel">
+                    <h1>Professor</h1>
+                    <form>
+                        <input name="username" type="text" placeholder="Username" />
+                        <input name="password" type="password" placeholder="Password" />
+                        <input name="submit" type="button" value="Log in" />
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div id="about-panel">
+                    <h3>About:</h3>
+                    <p>Question tosser is a web application that helps shy students participate more freely in the classroom and helps professors build more interactive classroom atmosphere. During a class, after the students and the professor log into the application, students can "toss" a question to the professor, who will receive the message immediately along with a loud notification sound. All the questions will be saved so that after class the professor can answer questions individually to the students who asked the questions.</p>
+                    <p>Question Tosser is built with ASP.NET MVC and SignalR technologies with WebSockets under the cover.</p>
+                    <p>Other technologies used include: C#, Javascript, AJAX, JQuery, MySQL, etc.</p>
+                    <p>Github repo: https://github.com/mikeogod/QuestionTosser</p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div id="logout-panel">
+                    <form>
+                        <input name="logout" type="button" value="logout" />
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -139,7 +155,7 @@
         </audio>
 
     </div>
-    
+
     <!--Script references. -->
     <!--Reference the jQuery library. -->
     <script src="~/Scripts/jquery-1.11.1.min.js"></script>
@@ -175,16 +191,16 @@
             var studentLoginPass = $("#student-login-panel input[name='password']");
             var professorLoginName = $("#professor-login-panel input[name='username']");
             var professorLoginPass = $("#professor-login-panel input[name='password']");
-            
+
             @{
-                if(Session["professor"]==null && Session["student"]==null)
+                if (Session["professor"] == null && Session["student"] == null)
                 {
                     @:QuestionTosser.AnonymousPage();
                 }
-                else if(Session["student"]!=null)
+                else if (Session["student"] != null)
                 {
                     @:studUserName.val("@(((Dictionary<string, string>)(Session["student"]))["username"])");
-                    @:QuestionTosser.StudentPage();
+                                @:QuestionTosser.StudentPage();
                 }
                 else
                 {
@@ -200,11 +216,11 @@
                 var encodedMsg = $('<div />').text(q).html();
                 // Add the message to the page. 
                 var newQuestion = $('<li class="list-group-item enlarged-list-item">' + encodedMsg + '</li>').hide();
-                    //
-                    //alert($('#questions').children().length);
-                    $('#questions').append(newQuestion);
-                    newQuestion.show('highlight', {}, 500);
-                
+                //
+                //alert($('#questions').children().length);
+                $('#questions').append(newQuestion);
+                newQuestion.show('highlight', {}, 500);
+
                 // Play the notification sound
                 document.getElementById('question-audio').play();
                 // Check if the current window is active. If not, show a desktop notification
@@ -218,12 +234,12 @@
                                     console.log("The permission is not granted");
                                 }
                                 else {
-                                    var notification = new Notification("Question", { body: encodedMsg, icon:"@Url.Content("~/PageResources/Images/question_mark.jpg")" });
+                                    var notification = new Notification("Question", { body: encodedMsg, icon: "@Url.Content("~/PageResources/Images/question_mark.jpg")" });
                                 }
                             });
                         }
                         else {
-                            var notification = new Notification("Question", { body: encodedMsg, icon:"@Url.Content("~/PageResources/Images/question_mark.jpg")" });
+                            var notification = new Notification("Question", { body: encodedMsg, icon: "@Url.Content("~/PageResources/Images/question_mark.jpg")" });
                         }
                     }
                     else {
@@ -231,14 +247,14 @@
                         //alert("Notification not supported");
                     }
                 }
-                
+
             };
 
             //Show notification that the hub sends to the clients
             chat.client.Notification = function (notification) {
-                swal({title:"Notification", text:notification, type: null});
+                swal({ title: "Notification", text: notification, type: null });
             };
-            
+
 
             //Start class
             $("#professor-panel input[name='start-class']").on("click", function () {
@@ -277,8 +293,7 @@
                     closeOnConfirm: false,
                     closeOnCancel: false
                 },
-                function (isConfirm)
-                {
+                function (isConfirm) {
                     if (isConfirm) {
                         chat.server.DisconnectClient();
                         QuestionTosser.EndSucceed();
@@ -287,7 +302,7 @@
                         swal("Cancelled", "You can continue the class now");
                     }
                 });
-                
+
             });
 
             //Join class
@@ -303,7 +318,7 @@
                             // Start the connection for students
                             $.connection.hub.start().done(function () {
                                 $('#toss-question').click(function () {
-                                    
+
                                     chat.server.Toss(question.val(), profConnID.val(), studUserName.val(), anonymous.prop("checked"));
                                     // Clear text box and reset focus for next question. 
                                     $('#question').val('').focus();
@@ -328,7 +343,7 @@
                         url: "@Url.Action("ProfessorRegister", "Professor")",
                         type: "POST",
                         dataType: "json",
-                        data: { username: registerName.val(), password: registerPass.val(), name:registerRealName.val() },
+                        data: { username: registerName.val(), password: registerPass.val(), name: registerRealName.val() },
                         success: function (data, textStatus, jqXHR) {
                             if (data["status"] == "RegisterPSucceed") {
                                 swal({ title: "Success!", text: "Professor, you have successfully registered!", type: "success", confirmButtonText: "Cool" });
@@ -359,7 +374,6 @@
                 }
             });
 
-
             //Student login
             $("#student-login-panel input[name='submit']").on("click", function () {
                 $.ajax({
@@ -375,7 +389,7 @@
                                     QuestionTosser.StudentPage();
                                 });
                             });
-                            
+
                         }
                         else {
                             alert(data["msg"]);
@@ -397,7 +411,7 @@
                                 swal({ title: "Success!", text: "Professor you have successfully logged in!", type: "success", confirmButtonText: "Cool" }, function () {
                                     QuestionTosser.ProfessorPage();
                                 });
-                                
+
                             });
                         }
                         else {
@@ -410,7 +424,7 @@
             //Pretty radios
             var firstRadio = $(".radiolist input[type='radio']").first();
             firstRadio.prop("checked", true);
-            
+
             $(".radiolist .radio-select").click(
                 function (event) {
                     event.preventDefault();
@@ -451,7 +465,7 @@
             // End the connection.
             chat.client.stopConnection = function () {
                 $.connection.hub.stop();
-                swal({ title: "Disconnected!", confirmButtonText: "OK"});
+                swal({ title: "Disconnected!", confirmButtonText: "OK" });
             }
 
             // Handle errors that caused disconnection

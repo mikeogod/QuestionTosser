@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
 using System.Data.Odbc;
 using System.Configuration;
+using System.Net;
+using System.IO;
 
 namespace SignalRChat
 {
     public class ClassRoomHub : Hub
     {
-        HashSet<string> badWords;
+        
         public override Task OnConnected()
         {
             return base.OnConnected();
@@ -75,53 +77,22 @@ namespace SignalRChat
         public void Toss(string question, string profConnID, string userName, bool anonymous=false)
         {
 
-            badWords = new HashSet<string>();
-
-            badWords.Add("ass");
-                badWords.Add("asshole");
-                badWords.Add("ass hole");
-            badWords.Add("bitch");
-            badWords.Add("shit");
-            badWords.Add("crap");
-            badWords.Add("damn");
-            badWords.Add("fuck");
-                badWords.Add("fucker");
-                badWords.Add("fucking");
-                badWords.Add("motherfucker");
-            badWords.Add("hell");
-            badWords.Add("suck");
-                badWords.Add("sucks");
-                badWords.Add("sucker");
-            badWords.Add("wtf");
-
-            string[] words_array = question.Split(' ');
-
-            foreach (string word in badWords)
+            if (ContainsProfanity(question))
             {
-                for (int i = 0; i < words_array.Length; i++)
-                {
-                    bool if_equal = false;
-                    if_equal = words_array[i].Equals(word, StringComparison.OrdinalIgnoreCase);
-                    if (if_equal == true)
-                    {
-                        words_array[i] = "******";
-                    }
-                }
+                Clients.Caller.Notification("Your question contains profanity language. Please be nice.");
+                return;
             }
-
-            question = "";
-            for (int j = 0; j < words_array.Length; j++)
-            {
-                string new_word = words_array[j] + " ";
-                question += new_word;
-            }
-            System.Diagnostics.Debug.WriteLine(question);
+            
             if (anonymous)
             {
                 userName = "Anonymous";
             }
             if (question == "" || profConnID == "" || userName == "")
             {
+                if (question == "")
+                {
+                    Clients.Caller.Notification("You can't toss a empty question");
+                }
                 return;
             }
             Clients.Client(profConnID).postQuestion(userName + " asked: " + question);
@@ -132,6 +103,65 @@ namespace SignalRChat
         {
             Clients.Caller.stopConnection();
         }
-        
+
+        private bool ContainsProfanity(String question)
+        {
+            //Use PurgoMalum web service
+            bool webFailed = false;
+            try
+            {
+                var url = "http://www.purgomalum.com/service/containsprofanity?text={0}";
+                WebClient client = new WebClient();
+                Stream data = client.OpenRead(String.Format(url, question));
+                StreamReader reader = new StreamReader(data);
+                string s = reader.ReadToEnd().Trim();
+                data.Close();
+                reader.Close();
+                return s=="true"; 
+            }
+            catch (WebException e)
+            {
+                //Web service call failed. Choose alternative local service instead
+                webFailed = true;
+            }
+            if (webFailed)
+            {
+                //Use local filter
+                List<String> badWords = new List<string>();
+                badWords.Add("ass");
+                badWords.Add("asshole");
+                badWords.Add("ass hole");
+                badWords.Add("bitch");
+                badWords.Add("shit");
+                badWords.Add("crap");
+                badWords.Add("damn");
+                badWords.Add("fuck");
+                badWords.Add("fucker");
+                badWords.Add("fucking");
+                badWords.Add("motherfucker");
+                badWords.Add("hell");
+                badWords.Add("suck");
+                badWords.Add("sucks");
+                badWords.Add("sucker");
+                badWords.Add("wtf");
+
+                string[] words_array = question.Split(' ');
+
+                foreach (string word in badWords)
+                {
+                    for (int i = 0; i < words_array.Length; i++)
+                    {
+                        bool if_equal = false;
+                        if_equal = words_array[i].Equals(word, StringComparison.OrdinalIgnoreCase);
+                        if (if_equal == true)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
     }
 }

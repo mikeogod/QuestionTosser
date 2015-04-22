@@ -1,7 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
 
 p{
- display: inline-block;
+  display: inline-block;
 } 
 
 .button{
@@ -74,7 +74,6 @@ form{
 input[type="button"]{
   width:100%;
   background:#3399cc;
-  /*background: #8DC63F;*/
   border:0;
   padding:4%;
   font-size:150%;
@@ -85,7 +84,6 @@ input[type="button"]{
 }
 
 input[type="button"]:hover{
-  /*background:#2288bb;*/
   background: #8DC63F;
 }
 

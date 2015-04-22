@@ -1,7 +1,7 @@
 ﻿var QuestionTosser = QuestionTosser || {};
 QuestionTosser.HideAll = function () {
     $("#main-logo, #question-panel, #professor-panel, #student-panel, #questions-panel, #student-login-panel," +
-        "#professor-login-panel, #register-panel, #about-panel, #logout-panel").hide({ effect: 'fade', easing: 'linear', duration: 0 });
+        "#professor-login-panel, #register-panel, #about-panel, #logout-panel").hide();
             
 };
 QuestionTosser.HideAllTransition = function (callback) {
@@ -19,8 +19,7 @@ QuestionTosser.HideAllTransition = function (callback) {
         else /*(index == elementCount - 1)*/ {
             $(domObj).hide({
                 effect: 'blind', easing: 'linear', duration: 500, complete: function () {
-                    $("#main-logo").hide({ effect: 'fade', easing: 'linear', duration: 500 });
-                    callback();
+                    $("#main-logo").hide({ effect: 'fade', easing: 'linear', duration: 500, complete: callback });
                 }
             });
         }
@@ -47,8 +46,9 @@ QuestionTosser.ProfessorPage = function () {
     $("#logout-panel").show();
 };
 QuestionTosser.JoinSucceed = function () {
-    $("#student-panel input[name='code']").hide();
-    $("#student-panel input[name='submit']").hide();
+    //$("#student-panel input[name='code']").hide();
+    //$("#student-panel input[name='submit']").hide();
+    $("#student-panel form").hide();
     $("#question-panel").show();
 };
 QuestionTosser.StartSucceed = function () {
