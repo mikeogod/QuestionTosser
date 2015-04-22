@@ -145,7 +145,7 @@ namespace QuestionTosser.Controllers
                     using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["QuestionTosserMySQLDBConnection"].ConnectionString))
                     {
                         conn.Open();
-                        string sqlStr = "SELECT prof_connection_id FROM `class` WHERE `code`= ?";
+                        string sqlStr = "SELECT prof_connection_id, name FROM `class` WHERE `code`= ?";
                         OdbcCommand comm = new OdbcCommand(sqlStr, conn);
                         comm.Parameters.AddWithValue("code", code);
                         OdbcDataReader reader = comm.ExecuteReader();
@@ -153,7 +153,12 @@ namespace QuestionTosser.Controllers
                         {
 
                             reader.Read();
-                            return Json(new { msg = "Join succeed", status = "JoinClassSucceed", profConnID = (String)reader["prof_connection_id"] });
+                            return Json(new { 
+                                msg = "Join succeed", 
+                                status = "JoinClassSucceed", 
+                                profConnID = (String)reader["prof_connection_id"], 
+                                classname= (String)reader["name"]
+                            });
                         }
                         else
                         {

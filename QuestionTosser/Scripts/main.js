@@ -1,12 +1,21 @@
 ﻿var QuestionTosser = QuestionTosser || {};
+
+if (typeof showEffect !== 'undefined' || typeof hideEffect !== 'undefined' || typeof easingType !== 'undefined' || typeof durationLen !== 'undefined') {
+    throw new Error("Name collision happened.");
+}
+var showEffect = showEffect || "blind";
+var hideEffect = hideEffect || "blind";
+var easingType = easingType || "swing";
+var durationLen = durationLen || 500;
 QuestionTosser.HideAll = function () {
-    $("#main-logo, #question-panel, #professor-panel, #student-panel, #questions-panel, #student-login-panel," +
+    $("#main-logo, #question-panel, #professor-panel, #student-panel, #questions-panel, #endclass-panel, #student-login-panel," +
         "#professor-login-panel, #register-panel, #about-panel, #logout-panel").hide();
             
 };
-QuestionTosser.HideAllTransition = function (callback) {
-    if (typeof callback === 'undefined') callback = function () { alert(); };
-    var displayedElements=$("#question-panel, #professor-panel, #student-panel, #questions-panel, #student-login-panel," +
+QuestionTosser.HideAllWithTransition = function (callback) {
+    if (typeof callback === 'undefined') callback = function () { };
+    //Filter out all the hidden panels, keeping only visible ones
+    var displayedElements = $("#question-panel, #professor-panel, #student-panel, #questions-panel, #endclass-panel, #student-login-panel," +
         "#professor-login-panel, #register-panel, #about-panel, #logout-panel").filter(function (index, domObj) {
             return $(domObj).css('display') !== 'none';
         });
@@ -14,56 +23,71 @@ QuestionTosser.HideAllTransition = function (callback) {
     displayedElements.each(function (index, domObj) {
         if (index !== displayedElements.length - 1)
         {
-            $(domObj).hide({ effect: 'blind', easing: 'linear', duration: 500 });
+            $(domObj).hide({ effect: hideEffect, easing: easingType, duration: durationLen });
         }
         else /*(index == elementCount - 1)*/ {
             $(domObj).hide({
-                effect: 'blind', easing: 'linear', duration: 500, complete: function () {
-                    $("#main-logo").hide({ effect: 'fade', easing: 'linear', duration: 500, complete: callback });
+                effect: hideEffect, easing: easingType, duration: durationLen, complete: function () {
+                    if ($("#main-logo").css('display') !== 'none') {
+                        $("#main-logo").hide({ effect: hideEffect, easing: easingType, duration: durationLen, complete: callback });
+                    }
+                    else {
+                        callback();
+                    }
                 }
             });
         }
     });
-
+    if (displayedElements.length === 0) {
+        callback();
+    }
+    
 };
 QuestionTosser.AnonymousPage = function () {
-    QuestionTosser.HideAll();
-    $("#main-logo").show();
-    $("#about-panel").show();
-    $("#student-login-panel").show();
-    $("#professor-login-panel").show();
-    $("#register-panel").show();
+    QuestionTosser.HideAllWithTransition(function () {
+        $("#main-logo").show({ effect: showEffect, easing: easingType, duration: durationLen });
+        $("#about-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+        $("#student-login-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+        $("#professor-login-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+        $("#register-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+    });
+    
 };
 QuestionTosser.StudentPage = function () {
-    QuestionTosser.HideAll();
-    $("#student-panel").show();
-    $("#logout-panel").show();
+    QuestionTosser.HideAllWithTransition(function () {
+        $("#student-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+        $("#logout-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+    });
+   
 };
 QuestionTosser.ProfessorPage = function () {
-    QuestionTosser.HideAll();
-    $("#professor-panel").show();
-    $("#professor-panel input[name='end-class']").hide();
-    $("#logout-panel").show();
+    QuestionTosser.HideAllWithTransition(function () {
+        $("#professor-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+        $("#logout-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+    });
+    
 };
 QuestionTosser.JoinSucceed = function () {
-    //$("#student-panel input[name='code']").hide();
-    //$("#student-panel input[name='submit']").hide();
-    $("#student-panel form").hide();
-    $("#question-panel").show();
+    QuestionTosser.HideAllWithTransition(function () {
+        //$("#student-panel").hide({ effect: hideEffect, easing: easingType, duration: durationLen });
+        $("#question-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+        $("#logout-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+    });
 };
 QuestionTosser.StartSucceed = function () {
-    $("#professor-panel input[name='classname']").hide();
-    $("#professor-panel input[name='code']").hide();
-    $("#professor-panel input[name='start-class']").hide();
-    $("#professor-panel input[name='end-class']").show();
-    $("#questions-panel").show();
+    QuestionTosser.HideAllWithTransition(function () {
+        //$("#professor-panel").hide();
+        $("#endclass-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+        $("#questions-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+    });
 };
 QuestionTosser.EndSucceed = function () {
-    $("#professor-panel input[name='classname']").show();
-    $("#professor-panel input[name='code']").show();
-    $("#professor-panel input[name='start-class']").show();
-    $("#professor-panel input[name='end-class']").hide();
-    $("#questions-panel").hide();
+    QuestionTosser.HideAllWithTransition(function () {
+        $("#professor-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+        //$("#endclass-panel").hide();
+        //$("#questions-panel").hide();
+        $("#logout-panel").show({ effect: showEffect, easing: easingType, duration: durationLen });
+    });
 };
 QuestionTosser.ClearLoginRegisterFields = function () {
     $("#register-panel input[type='text']").val("");

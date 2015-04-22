@@ -52,58 +52,6 @@
         </div>
 
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div id="question-panel">
-                    <form>
-                        <input id="question" type="text" placeholder="Question" />
-                        <div class="input-group pull-right">
-                            <label>Anonymous</label><input id="anonymous" type="checkbox" />
-                        </div>
-                        <input id="toss-question" type="button" name="submit" value="Toss" />
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div id="professor-panel">
-                    <form>
-                        <input name="classname" type="text" placeholder="class name" />
-                        <input name="code" type="text" placeholder="code" />
-                        <input name="start-class" type="button" value="Start Class" />
-                        <input name="end-class" type="button" value="End Class" />
-                    </form>
-                    <input name="username" type="hidden" />
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div id="student-panel">
-                    <form>
-                        <input name="code" type="text" placeholder="code" />
-                        <input name="submit" type="button" value="Join" />
-                    </form>
-                    <input name="username" type="hidden" />
-                    <input name="prof-conn-id" type="hidden" />
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div id="questions-panel">
-                    <div class="panel panel-default">
-                        <ul id="questions" class="list-group">
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
             <div class="col-md-5 col-md-offset-1">
                 <div id="student-login-panel">
                     <h1>Student</h1>
@@ -125,6 +73,72 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div id="professor-panel">
+                    <form>
+                        <input name="classname" type="text" placeholder="class name" />
+                        <input name="code" type="text" placeholder="code" />
+                        <input name="start-class" type="button" value="Start Class" />
+                    </form>
+                    <input name="username" type="hidden" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div id="questions-panel">
+                    <div class="panel panel-default">
+                        <ul id="questions" class="list-group">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div id="endclass-panel">
+                    <form>
+                        <input name="end-class" type="button" value="End Class" />
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div id="student-panel">
+                    <form>
+                        <input name="code" type="text" placeholder="code" />
+                        <input name="submit" type="button" value="Join" />
+                    </form>
+                    <input name="username" type="hidden" />
+                    <input name="prof-conn-id" type="hidden" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div id="question-panel">
+                    <form>
+                        <h3>Welcome to <span id="classname">class</span></h3>
+                        <input id="question" type="text" placeholder="Question" />
+                        <div class="input-group pull-right">
+                            <label>Anonymous</label><input id="anonymous" type="checkbox" />
+                        </div>
+                        <input id="toss-question" type="button" name="submit" value="Toss" />
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        
+
+        
 
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
@@ -183,6 +197,7 @@
             var profConnID = $("#student-panel input[name='prof-conn-id']");
             var studUserName = $("#student-panel input[name='username']");
             var question = $("#question");
+            var classname = $("#classname");
             var anonymous = $("#anonymous");
             var registerName = $("#register-panel input[name='username']");
             var registerPass = $("#register-panel input[name='password']");
@@ -192,6 +207,8 @@
             var professorLoginName = $("#professor-login-panel input[name='username']");
             var professorLoginPass = $("#professor-login-panel input[name='password']");
 
+            //Hide all panels to start with a clean page
+            QuestionTosser.HideAll();
             @{
                 if (Session["professor"] == null && Session["student"] == null)
                 {
@@ -281,7 +298,7 @@
             });
 
             //End class
-            $("#professor-panel input[name='end-class']").on('click', function () {
+            $("#endclass-panel input[name='end-class']").on('click', function () {
                 swal({
                     title: "Are you sure?",
                     text: "You will lose all the current students!",
@@ -315,6 +332,7 @@
                     success: function (data, textStatus, jqXHR) {
                         if (data["status"] == "JoinClassSucceed") {
                             profConnID.val(data["profConnID"]);
+                            classname.html(data["classname"]);
                             // Start the connection for students
                             $.connection.hub.start().done(function () {
                                 $('#toss-question').click(function () {
@@ -384,12 +402,8 @@
                     success: function (data, textStatus, jqXHR) {
                         if (data["status"] == "LoginSSucceed") {
                             studUserName.val(data["user"]["username"]);
-                            QuestionTosser.HideAllTransition(function () {
-                                swal({ title: "Success!", text: "Student you have successfully logged in!", type: "success", confirmButtonText: "Cool" }, function () {
-                                    QuestionTosser.StudentPage();
-                                });
-                            });
-
+                            swal({ title: "Success!", text: "Student you have successfully logged in!", type: "success", confirmButtonText: "Cool" });
+                            QuestionTosser.StudentPage();
                         }
                         else {
                             alert(data["msg"]);
@@ -407,12 +421,8 @@
                     data: { username: professorLoginName.val(), password: professorLoginPass.val() },
                     success: function (data, textStatus, jqXHR) {
                         if (data["status"] == "LoginPSucceed") {
-                            QuestionTosser.HideAllTransition(function () {
-                                swal({ title: "Success!", text: "Professor you have successfully logged in!", type: "success", confirmButtonText: "Cool" }, function () {
-                                    QuestionTosser.ProfessorPage();
-                                });
-
-                            });
+                            swal({ title: "Success!", text: "Professor you have successfully logged in!", type: "success", confirmButtonText: "Cool" });
+                            QuestionTosser.ProfessorPage();
                         }
                         else {
                             alert(data["msg"]);

@@ -69,7 +69,7 @@ namespace SignalRChat
             catch (OdbcException e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
-                return Clients.Client(Context.ConnectionId).postQuestion("StartClass has encountered an exception!");
+                return Clients.Client(Context.ConnectionId).postQuestion("Class failed to start!");
             }
         }
 

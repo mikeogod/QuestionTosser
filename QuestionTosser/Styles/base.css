@@ -23,7 +23,7 @@ p{
   background:rgba(34, 136, 187, 1);
 }
 
-#professor-login-panel, #student-login-panel, #register-panel, #student-panel, #question-panel, #professor-panel, #logout-panel{
+#professor-login-panel, #student-login-panel, #register-panel, #student-panel, #question-panel, #professor-panel, #questions-panel, #endclass-panel, #logout-panel{
   font-family:'Open Sans',sans-serif;
   transition:opacity 1s;
   -webkit-transition:opacity 1s;
