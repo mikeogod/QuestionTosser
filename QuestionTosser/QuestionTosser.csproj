@@ -154,6 +154,23 @@
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
     <Content Include="Scripts\main.js" />
+    <Content Include="Vendors\scrollto\.gitignore" />
+    <Content Include="Vendors\scrollto\demo\css\style.css" />
+    <Content Include="Vendors\scrollto\demo\css\style.old.css" />
+    <Content Include="Vendors\scrollto\demo\index.html" />
+    <Content Include="Vendors\scrollto\demo\index.old.html" />
+    <Content Include="Vendors\scrollto\jquery.scrollTo.js" />
+    <Content Include="Vendors\scrollto\jquery.scrollTo.min.js" />
+    <Content Include="Vendors\scrollto\tests\ElemMaxY-compat.html" />
+    <Content Include="Vendors\scrollto\tests\ElemMaxY-quirks.html" />
+    <Content Include="Vendors\scrollto\tests\index.html" />
+    <Content Include="Vendors\scrollto\tests\test.js" />
+    <Content Include="Vendors\scrollto\tests\WinMaxY-compat.html" />
+    <Content Include="Vendors\scrollto\tests\WinMaxY-quirks.html" />
+    <Content Include="Vendors\scrollto\tests\WinMaxY-to-iframe-compat.html" />
+    <Content Include="Vendors\scrollto\tests\WinMaxY-to-iframe-quirks.html" />
+    <Content Include="Vendors\scrollto\tests\WinMaxY-with-iframe-compat.html" />
+    <Content Include="Vendors\scrollto\tests\WinMaxY-with-iframe-quirks.html" />
     <Content Include="Vendors\sweetalert\.gitignore" />
     <Content Include="Vendors\sweetalert\example\example.css" />
     <Content Include="Vendors\sweetalert\example\images\logo_big%402x.png" />
@@ -200,6 +217,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Vendors\scrollto\.jscsrc" />
+    <Content Include="Vendors\scrollto\.jshintrc" />
+    <Content Include="Vendors\scrollto\bower.json" />
+    <Content Include="Vendors\scrollto\CHANGELOG" />
+    <Content Include="Vendors\scrollto\composer.json" />
+    <Content Include="Vendors\scrollto\LICENSE" />
+    <Content Include="Vendors\scrollto\package.json" />
+    <Content Include="Vendors\scrollto\README.md" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
